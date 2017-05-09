@@ -8,5 +8,5 @@ processors:
 
 output.elasticsearch:
   hosts: ['elasticsearch:9200']
-  username: elastic
+  username: docker
   password: changeme

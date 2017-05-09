@@ -70,7 +70,7 @@ services:
           -beat ""
           -file /usr/share/metricbeat/beats-dashboards-{{ version }}.zip
           -es http://elasticsearch:9200
-          -user elastic
+          -user docker
           -pass changeme
       depends_on:
         elasticsearch:
