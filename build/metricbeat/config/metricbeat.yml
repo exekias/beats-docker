@@ -19,8 +19,11 @@ metricbeat.modules:
 - module: system
   period: 60s
   metricsets: [filesystem, fsstat]
-  filters:
-    - drop_event.when.regexp.mount_point: '^(/hostfs)?/(sys|cgroup|proc|dev|etc|host|var/lib/docker)($|/)'
+  processors:
+    - drop_event:
+        when:
+          regexp:
+            mount_point: '^(/hostfs)?/(sys|cgroup|proc|dev|etc|host|var/lib/docker)($|/)'
 
 processors:
 - add_cloud_metadata:
