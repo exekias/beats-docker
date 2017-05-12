@@ -46,7 +46,7 @@ services:
     networks:
        - beats
     healthcheck:
-      test: ['CMD', 'curl', '-f', '-u', 'elastic:changeme', 'http://localhost:9200']
+      test: ['CMD', 'curl', '-f', '-u', 'docker:changeme', 'http://localhost:9200']
 
   kibana:
     image: {{ registry }}/kibana/kibana:{{ version }}
