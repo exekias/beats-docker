@@ -16,7 +16,7 @@ services:
     cap_add:
       - NET_RAW
       - NET_ADMIN
-    command: packetbeat -v -e -E output.elasticsearch.hosts='["localhost:9200"]'
+    command: -v -e -E output.elasticsearch.hosts='["localhost:9200"]'
     network_mode: host
     {%- else %}
     networks:
@@ -29,7 +29,7 @@ services:
       - /proc:/hostfs/proc:ro
       - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
       - /:/hostfs:ro
-    command: metricbeat -e -system.hostfs=/hostfs
+    command: -e -system.hostfs=/hostfs
     {%- endif %}
     depends_on:
       elasticsearch:
