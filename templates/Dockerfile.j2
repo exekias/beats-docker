@@ -1,7 +1,6 @@
 # This Dockerfile was generated from templates/Dockerfile.j2
 {% set beat_home = '/usr/share/%s' % beat -%}
 {% set binary_file = '%s/%s' % (beat_home, beat) -%}
-{% set config_file = '%s/%s.yml' % (beat_home, beat) -%}
 
 FROM centos:7
 MAINTAINER Elastic Docker Team <docker@elastic.co>
@@ -16,7 +15,7 @@ RUN curl -Lso {{ beat_home }}/beats-dashboards-{{ elastic_version }}.zip {{ dash
 
 ENV PATH={{ beat_home }}:$PATH
 
-COPY config/{{ beat }}.yml {{ config_file }}
+COPY config {{ beat_home }}
 
 # Provide a non-root user.
 RUN groupadd --gid 1000 {{ beat }} && \
@@ -28,6 +27,9 @@ RUN mkdir data logs && \
     find {{ beat_home }} -type d -exec chmod 0750 {} \; && \
     find {{ beat_home }} -type f -exec chmod 0640 {} \; && \
     chmod 0750 {{ binary_file }} scripts/* && \
+    {%- if beat == 'filebeat' or beat == 'metricbeat' %}
+    chmod 0770 modules.d && \
+    {% endif %}
     chmod 0770 data logs
 
 {%- if beat == 'packetbeat' %}
