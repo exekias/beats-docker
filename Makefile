@@ -6,6 +6,9 @@ endif
 ifdef STAGING_BUILD_NUM
 export VERSION_TAG := $(ELASTIC_VERSION)-$(STAGING_BUILD_NUM)
 DOWNLOAD_URL_ROOT := https://staging.elastic.co/$(VERSION_TAG)/downloads/beats
+else ifdef SNAPSHOT
+export VERSION_TAG := $(ELASTIC_VERSION)-SNAPSHOT
+DOWNLOAD_URL_ROOT := https://beats-nightlies.s3.amazonaws.com
 else
 export VERSION_TAG := $(ELASTIC_VERSION)
 DOWNLOAD_URL_ROOT := https://artifacts.elastic.co/downloads/beats
@@ -50,9 +53,10 @@ $(BEATS):
 	touch build/$@/config/$@.yml
 	jinja2 \
 	  -D beat=$@ \
-	  -D version=$(ELASTIC_VERSION) \
-	  -D url=$(DOWNLOAD_URL_ROOT)/$@/$@-$(ELASTIC_VERSION)-linux-x86_64.tar.gz \
-	  -D dashboards_url=$(DOWNLOAD_URL_ROOT)/beats-dashboards/beats-dashboards-$(ELASTIC_VERSION).zip \
+	  -D elastic_version=$(ELASTIC_VERSION) \
+	  -D version_tag=$(VERSION_TAG) \
+	  -D url=$(DOWNLOAD_URL_ROOT)/$@/$@-$(VERSION_TAG)-linux-x86_64.tar.gz \
+	  -D dashboards_url=$(DASHBOARDS_URL_ROOT)/beats-dashboards/beats-dashboards-$(ELASTIC_VERSION).zip \
           templates/Dockerfile.j2 > build/$@/Dockerfile
 	docker build --tag=$(REGISTRY)/beats/$@:$(VERSION_TAG) build/$@
 

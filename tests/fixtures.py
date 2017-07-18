@@ -9,7 +9,7 @@ except KeyError:
 
 class Beat:
     def __init__(self, name, process, home_dir, data_dir, config_dir, log_dir,
-                 binary_file, config_file, dashboard_file, capabilities):
+                 binary_file, config_file, dashboard_file, capabilities, version_tag):
         self.name = name
         self.process = process
         self.home_dir = home_dir
@@ -21,6 +21,7 @@ class Beat:
         self.dashboard_file = dashboard_file
         self.version = version
         self.capabilities = capabilities
+        self.version_tag = version_tag
 
 
 @pytest.fixture()
@@ -50,4 +51,5 @@ def beat(Process, File, TestinfraBackend, Command):
         binary_file=binary_file,
         dashboard_file=File(os.path.join(beat_home, 'beats-dashboards-%s.zip' % version)),
         capabilities=capabilities,
+        version_tag=os.environ.get('VERSION_TAG', version),
     )
