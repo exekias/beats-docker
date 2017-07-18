@@ -53,10 +53,8 @@ $(BEATS):
 	touch build/$@/config/$@.yml
 	jinja2 \
 	  -D beat=$@ \
-	  -D elastic_version=$(ELASTIC_VERSION) \
 	  -D version_tag=$(VERSION_TAG) \
 	  -D url=$(DOWNLOAD_URL_ROOT)/$@/$@-$(VERSION_TAG)-linux-x86_64.tar.gz \
-	  -D dashboards_url=$(DASHBOARDS_URL_ROOT)/beats-dashboards/beats-dashboards-$(ELASTIC_VERSION).zip \
           templates/Dockerfile.j2 > build/$@/Dockerfile
 	docker build --tag=$(REGISTRY)/beats/$@:$(VERSION_TAG) build/$@
 
